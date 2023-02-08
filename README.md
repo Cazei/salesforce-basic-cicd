@@ -12,7 +12,7 @@ This readme will walk you through how to configure the CI/CD and a Metadata back
 The CI/CD and metadata backup can be used separetly.
 
 <b> If you only want the Metadata backup and want to run it in Docker you can use this Docker file </b>
-[Salesforce Metadata backup robot Devcore TFS](https://tfs.devcore.se/tfs/DefaultCollection/Salesforce/_git/salesforce-metadata-backup-robot)
+ --ADD DOCKER FILE--
 
 
 To get started, clone this repo into a new Azure DevOps Repository.
@@ -160,7 +160,7 @@ The pipeline definition is stored in the pipelines directory as <b>metadatabacku
 The files required for the Metadata backup is stored in the folder <b>Metadata-backup</b>.
 
 <b> If you only want the Metadata backup and want to run it in Docker you can use this Docker file </b>
-[Salesforce Metadata backup robot Devcore TFS](https://tfs.devcore.se/tfs/DefaultCollection/Salesforce/_git/salesforce-metadata-backup-robot)
+--ADD DOCKERFILE LINK--
 
 ## Setting up the metadata backup
 
