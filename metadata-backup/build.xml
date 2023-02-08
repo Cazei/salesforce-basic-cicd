@@ -1,0 +1,28 @@
+<!--
+    Author  :   Carl Nordefjäll
+    Date    :   7/5/2022
+-->
+<project name="Generate Package.xml subfile" default="retrieveUnpackaged" basedir="."
+    xmlns:sf="antlib:com.salesforce">
+    <property file="build.properties" />
+    <import file="GeneratePackage_xml.xml" as="complete"/>
+
+    <taskdef resource="com/salesforce/antlib.xml" uri="antlib:com.salesforce">
+        <classpath>
+            <pathelement location="${basedir}/lib/ant-salesforce.jar" />
+        </classpath>
+    </taskdef>
+
+    <target name="retrieveUnpackaged" depends="testPackageXML">
+        <mkdir dir="src" />
+        <delete includeemptydirs="true">
+
+            <fileset dir="src" includes="**/*"/>
+        </delete>
+        <!-- Retrieve the contents into another directory -->
+        <sf:retrieve username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" retrieveTarget="src" unpackaged="${sf.xmlPath}/package.xml"/>
+        <delete includeemptydirs="true">
+            <fileset dir="tmp" includes="**/*"/>
+        </delete>
+    </target>
+</project>

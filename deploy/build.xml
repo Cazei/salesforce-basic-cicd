@@ -1,0 +1,47 @@
+<project name="SFDX Deployment Demo" default="retrieveUnpackaged" basedir="."
+    xmlns:sf="antlib:com.salesforce">
+
+    <property file="build.properties" />
+
+
+
+    <taskdef resource="com/salesforce/antlib.xml" uri="antlib:com.salesforce">
+        <classpath>
+            <pathelement location="ant-salesforce.jar" />
+        </classpath>
+    </taskdef>
+
+    <target name="retrieveUnpackaged">
+
+        <import file="GeneratePackage_xml.xml" as="complete"/>
+
+        <mkdir dir="src" />
+        <delete includeemptydirs="true">
+            <fileset dir="src" includes="**/*"/>
+        </delete>
+        <!-- Retrieve the contents into another directory -->
+        <sf:retrieve username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" retrieveTarget="src" unpackaged="metadata-backup/package.xml"/>
+
+        <delete includeemptydirs="true">
+            <fileset dir="tmp" includes="**/*"/>
+        </delete>
+
+        <!-- Retrieve the contents into a directory -->
+    </target>
+
+    <target name="deployUnpackaged">
+        <!-- Deploy the contents into an org -->
+        <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" deployroot="../deploysource" checkOnly="false" />
+    </target>
+
+    <target name="deployCodeCheckOnly">
+        <!-- Deploy the contents into an org -->
+        <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" deployroot="../deploysource" checkOnly="true" />
+    </target>
+
+    <target name="deployCode">
+        <!-- Deploy the contents into an org with check only -->
+        <sf:deploy username="${sf.username}" password="${sf.password}" serverurl="${sf.serverurl}" deployroot="../deploysource" checkOnly="false" />
+    </target>
+
+</project>

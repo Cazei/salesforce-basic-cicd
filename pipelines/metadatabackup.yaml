@@ -1,0 +1,31 @@
+trigger:
+  - main
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - group: metadata-backup
+
+resources:
+  containers:
+  - container: builder
+    image: salesforce/salesforcedx:latest-rc-slim
+  - container: ant
+    image: frekele/ant
+  
+steps:
+   
+  - task: Bash@3
+    inputs:
+      filePath: 'metadata-backup/start-backup.bash'
+    target:
+      container: ant
+    displayName: Retrieve Org Metadata
+
+  - task: Bash@3
+    inputs:
+      filePath: 'metadata-backup/convert-and-push.bash'
+    target:
+      container: builder
+    displayName: Convert and push metadata

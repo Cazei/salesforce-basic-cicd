@@ -1,0 +1,45 @@
+jobs:
+  - job: Validate
+    pool:
+      name: Hosted Windows 2019 with VS2019
+    steps:
+      - task: Powershell@2
+        displayName: Delta Execute
+        inputs:
+          filePath: "deploy/Delta.ps1"
+      - task: ArchiveFiles@2
+        displayName: "Archive deloyment Source files"
+        inputs:
+          rootFolderOrFile: "deploysource"
+          includeRootFolder: false
+          archiveType: "zip"
+          archiveFile: "deploysource_$(Build.BuildId).zip"
+          replaceExistingArchive: true
+      - task: ArchiveFiles@2
+        displayName: Archive deployfiles
+        inputs:
+          rootFolderOrFile: "deploy"
+          includeRootFolder: false
+          archiveType: "zip"
+          archiveFile: "deploy_$(Build.BuildId).zip"
+          replaceExistingArchive: true
+      - task: PublishBuildArtifacts@1
+        displayName: "Publish Artifact: delta"
+        inputs:
+          PathtoPublish: "deploysource_$(Build.BuildId).zip"
+          ArtifactName: "deploysource_artifact"
+          publishLocation: "Container"
+      - task: PublishBuildArtifacts@1
+        displayName: "Publish Artifact: deploy"
+        inputs:
+          PathtoPublish: "deploy_$(Build.BuildId).zip"
+          ArtifactName: "deploy_artifact"
+          publishLocation: "Container"
+      - task: Ant@1
+        displayName: Ant Deploy Check
+        inputs:
+          buildFile: "deploy/build.xml"
+          options: "-Dsf.password=$(sf.password) -Dsf.username=$(sf.username) -Dsf.serverurl=$(sf.serverurl) -Dsf.maxPoll=$(sf.maxPoll)"
+          targets: "$(targetname)"
+          publishJUnitResults: false
+          javaHomeOption: "JDKVersion"
